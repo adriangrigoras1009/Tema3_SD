@@ -1,0 +1,115 @@
+Grigoras Adrian, 312CC
+Tema 3 SD
+--------------------------
+
+P1 - Schimbare
+
+Pentru a gasi drumul cu cele mai putine muchii schimbate:
+- am facut muchii bidirectionale
+- pe directia data in enunt am luat cost 0
+- pe directia inversa am luat costul dat in enunt
+- apoi am aplicat dijkstra pentru a afla costul minim pentru un ciclu
+
+Heapify_stergere - pentru dijkstra cand sterg root-ul sa reechilibrez arborele
+Heapify - atunci cand adaug un element in coada sa echilibrez
+Add_heap - adaug elementul pe ultima pozitie a vectorului arborelui
+Delete_root - elimin primul element si pun pe prima pozitie ce era pe ultima
+is_empty - verific daca e gol arborele
+update_heap - actualizez noua distanta daca s-a gasit una mai mica
+construire - citesc linie cu linie, fac muchii bidirectionale cum am detaliat mai sus
+	   - daca gaseste un ciclu de lungime 2 se opreste si afiseaza 0
+citire - citesc prima linie a fisierului
+dijkstra - algoritmul clasic dijkstra pentru a afla distanta
+	 - daca gasesc o distanta mai mica o bag in arbore si ramane salvata in vectorul dist
+schimbare - de la fiecare vecin al fiecare nod(prima muchie sa nu fie inversa) 
+	  - verific daca am ajuns la nodul parinte al vecinului de la care am pornit
+	  - daca distanta totala noua e mai mica actualizez minimul de la nodul ala
+	  - apoi pentru toate nodurile compar minimurile sa gasesc cel mai mic
+	  - daca s-a gasit o distanta o afisam, daca nu, afisam -1
+
+P2 - Reprezentanti
+
+Am folosit o structura pentru a tine reprezentantul si minimul fiecarui nod
+- de fiecare data in dijkstra cand un nod depasea minimul pe care il aveam deja
+- nu mai aplicam dijkstra pentru acel reprezentant pentru ca nu se putea actualiza minimul
+
+Heapify_stergere - pentru dijkstra cand sterg root-ul sa reechilibrez arborele
+Heapify - atunci cand adaug un element in coada sa echilibrez
+Add_heap - adaug elementul pe ultima pozitie a vectorului arborelui
+Delete_root - elimin primul element si pun pe prima pozitie ce era pe ultima
+is_empty - verific daca e gol arborele
+update_heap - actualizez noua distanta daca s-a gasit una mai mica
+construire - citesc linie cu linie, fac muchii bidirectionale introducant vecinii in coada
+	   - citesc reprezentantii in vectorul pentru ei
+citire - citesc prima linie a fisierului si aloc memorie
+dijkstra - algoritmul clasic pentru a afla distanta minima cu restrictia de mai sus
+	 - tot in algoritm calculez daca distanta nodului pe care il scot din heap este:
+		-mai mic sau egala(si indexul nodului prezent e mai mic)
+		-si inlocuiesc cu noul minim
+main - aplic pentru fiecare reprezentant dijkstra si apoi
+     - pentru fiecare nod afisez -1 sau reprezentantul nodului impreuna cu minimul gasit
+
+P3 - Drumuri
+
+- Pentru a rezolva taskul am utilizat 2 bfs-uri
+- intr-un bfs am retinut intr-un vector de structuri parintii fiecarui nod pana la nodul destinatie
+- in al doilea bfs am parcurs de la destinatie catre sursa pentru a merge doar pe drumurile gasite
+
+struct parinti - o lista de parinti
+aparitii - lista nodurilor care apar pe fiecare drum
+sort_list - sortez lista nodurilor din aparitii
+initq,add_queue,pop_queue,is_emptyq - functiile pentru cozile din bfs
+construire - citesc linie cu linie, fac muchii bidirectionale
+	   - citesc si nodurile drumurilor de parcurs
+bfs - aici aplic cei doi bfs
+    - am luat o variabila level si variabilele contor pentru a stii pe ce nivel sunt
+    - cat timp sunt inca pe acelasi nivel(si exista elemente in coada)
+	- elimin din coada primul element
+	- apoi pentru fiecare vecin al nodului:
+		-in lista de parinte al vecinului se pune nodul eliminat din coada
+		-daca nu a mai fost vazut SAU daca a fost vazut dar se afla pe acelasi nivel
+    - daca nu s-a gasit destinatia si am ramas fara elemente in coada se afiseaza -1
+    - daca s-au gasit aplicam al doilea bfs de la destinatie spre sursa
+    - am aplicat acelasi rationament cu nivelul pentru a vedea cati parinti are fiecare nivel
+    - daca la finalul unui nivel parcurs: contorul era 1 inseamna ca toate nodurile aveau acelasi parinte
+    - se adauga in lista de noduri comune acel nod
+    - la final adaugam si destinatia in nodurile comune
+    - sortam lista si le afisam
+
+P4 - Labirint
+
+- parcurg matricea cu un fel de dfs si folosesc o structura de matrici
+- in structura de matrici retin drumurile in care am fost in momentul cand ma aflam la acea distanta in momentul parcurgerii(pentru a nu parcurge de mai multe ori)
+- matricea de frunze verifica sa adaug doar frunzele noi gasite
+
+construire - citesc matricea si vectorul de directii
+rezolvare - am luat un contor go care imi indica de fiecare data indexul directiei
+	  - apoi din locul in care ma aflu ma mut in matrice pana gasesc 1 sau se termina matricea
+          - dupa fiecare miscare verificam daca pot sa ma mut in directia urmatoare
+          - daca pot verific sa nu fi fost vizitata din acelasi loc la acelasi index al directiilor
+          - dupa ce ies din recursivitate marchez locul directiei din care m-am intors ca vazut din partea aia
+	  - daca indexul este ultimul in functie de directe parcurg matricea pana gasesc 1 sau se termina
+	  - daca gasesc o frunza vazuta deja dau break(inseamna ca am mai fost pe acolo stiind ca ultima directie e mereu aceeasi)
+	  - daca nu o adaug in contor si continui
+
+P5 - Bonus
+
+- am aplicat algoritmul prim pentru a gasi arborele minim de acoperire (costul total minim avand drum intre fiecare nod)
+- apoi plec cu un dfs si tin minte in variabila max valoarea maxima a costului de pe drum
+
+Heapify_stergere - pentru dijkstra cand sterg root-ul sa reechilibrez arborele
+Heapify - atunci cand adaug un element in coada sa echilibrez
+Add_heap - adaug elementul pe ultima pozitie a vectorului arborelui
+Delete_root - elimin primul element si pun pe prima pozitie ce era pe ultima
+is_empty - verific daca e gol arborele
+update_heap - actualizez noua distanta daca s-a gasit una mai mica
+construire - citesc linie cu linie, fac muchii bidirectionale
+	   - citesc si nodurile drumurilor de parcurs
+prim - aplic algoritmul prim(dijkstra doar ca retin costuri in loc de distante)
+     - ama este noul arbore rezultat din prim
+dfs  - apoi pentru fiecare drum dat aplic dfs de la sursa
+     - in dfs retin max in alta variabila inainte de a intra in recursivitate(in caz ca e drum mort)
+     - daca drumul nu a dus nicaieri max devine inapoi ce era inainte sa o ia pe acel drum
+     - daca gasesc cost mai mare, max devine costul
+     - daca am gasit destinatia dau return si intorc maximul gasit
+
